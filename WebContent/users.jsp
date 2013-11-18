@@ -21,8 +21,7 @@
 		conn = ods.getConnection();
 		Statement stmtTester = conn.createStatement();
 		Statement stmtDeveloper = conn.createStatement();
-		rsetDeveloper = stmtDeveloper
-				.executeQuery("Select D.did, D.userName from Developer D");
+		rsetDeveloper = stmtDeveloper.executeQuery("Select D.did, D.userName from Developer D");
 		rsetTester = stmtTester.executeQuery("Select T.tid, T.userName from Tester T");
 		
 	} catch (SQLException e) {
@@ -41,16 +40,7 @@
 
 <body>
 	<p>
-		Click <a href="projects.jsp">here</a> to view all Projects.
-	</p>
-	<p>
-		Click <a href="home.jsp">here</a> to view all Issues.
-	</p>
-	<p>
-		Click <a href="addissueproject.jsp">here</a> to create a new Project or Issue.
-	</p>
-	<p>
-		Click <a href="home.jsp">here</a> to add a new User.
+		Click <a href="home.jsp">here</a> to go home.
 	</p>
 	<H2>Users</H2>
 	<TABLE>

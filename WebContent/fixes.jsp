@@ -22,7 +22,7 @@
 		Statement stmt = conn.createStatement();
 		Statement stmtDeveloper = conn.createStatement();
 		rset = stmt
-				.executeQuery("select P.pid, P.name from Project P");
+				.executeQuery("select F.fid, F.description, F.iid, D.username from Fix F, Developer D where F.did = D.did");
 	} catch (SQLException e) {
 		error_msg = e.getMessage();
 		if (conn != null) {
@@ -41,13 +41,17 @@
 	<p>
 		Click <a href="home.jsp">here</a> to go home.
 	</p>
-	<H2>Projects</H2>
+	<H2>Fixes</H2>
 	<TABLE>
 		<tr>
-			<td>ID</td>
-			<td>Name</td>
+			<td>Fix ID</td>
+			<td>Description</td>
+			<td>Issue ID</td>
+			<td>Developer</td>
 		</tr>
 		<tr>
+			<td><b>----------</b></td>
+			<td><b>------------------------------------------</b></td>
 			<td><b>----------</b></td>
 			<td><b>----------</b></td>
 		</tr>
@@ -55,8 +59,10 @@
 			if (rset != null) {
 				while (rset.next()) {
 					out.print("<tr>");
-					out.print("<td>" + rset.getInt("pid") + "</td>");
-					out.print("<td>" + rset.getString("name") + "</td>");
+					out.print("<td>" + rset.getInt("fid") + "</td>");
+					out.print("<td>" + rset.getString("description") + "</td>");
+					out.print("<td>" + rset.getInt("iid") + "</td>");
+					out.print("<td>" + rset.getString("username") + "</td>");
 					out.print("</tr>");
 				}
 			} else {

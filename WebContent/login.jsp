@@ -26,16 +26,24 @@
 			String type = request.getParameter("type");
 			Statement stmtLogin = conn.createStatement();
 			if (type != null && type.equals("developer"))
-			rsetLogin = stmtLogin.executeQuery("Select D.did as userid, D.username from Developer D where D.did =" + id);
-			else if(type !=null && type.equals("tester"))
-				rsetLogin = stmtLogin.executeQuery("Select T.did as userid, T.username from Tester T where T.tid  =" + id);
-			if(rsetLogin !=null && rsetLogin.next()) {
-				session.setAttribute("sname", rsetLogin.getString("userName"));
+				rsetLogin = stmtLogin
+						.executeQuery("Select D.did as userid, D.username from Developer D where D.did ="
+								+ id);
+			else if (type != null && type.equals("tester")) {
+				rsetLogin = stmtLogin
+						.executeQuery("Select T.tid as userid, T.username from Tester T where T.tid  ="
+								+ id);
+			}
+			if (rsetLogin != null && rsetLogin.next()) {
+				session.setAttribute("sname",
+						rsetLogin.getString("userName"));
 				session.setAttribute("stype", type);
 				session.setAttribute("sid", rsetLogin.getInt("userid"));
+				if (conn != null) {
+					conn.close();
+				}
 				response.sendRedirect("home.jsp");
-			}
-			else {
+			} else {
 				session.setAttribute("sname", null);
 				session.setAttribute("stype", null);
 				session.setAttribute("sid", null);
@@ -56,6 +64,9 @@
 <title>Login</title>
 </head>
 <body>
+	<p>
+		Click <a href="home.jsp">here</a> to go home.
+	</p>
 	<form method=post action="login.jsp">
 		<p>
 			Your userid: <input type="text" name="id" size="20" maxlength="30"

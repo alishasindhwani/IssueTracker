@@ -6,12 +6,13 @@
 <!-- This import is necessary for JDBC -->
 <%@ page import="java.sql.*"%>
 <%@ page import="oracle.jdbc.pool.OracleDataSource"%>
+<%@ page import="java.util.ArrayList"%>
 
 <!-- Database lookup -->
 <%
 	Connection conn = null;
 	ResultSet rset = null;
-	ResultSet rsetLogin = null;
+	ArrayList<Integer> closesList = null;
 	String value = request.getParameter("order");
 	String error_msg = "";
 	Object sid = session.getAttribute("sid");
@@ -22,6 +23,16 @@
 		ods.setURL("jdbc:oracle:thin:as4312/nyquil@//w4111b.cs.columbia.edu:1521/ADB");
 		conn = ods.getConnection();
 		Statement stmt = conn.createStatement();
+		Statement stmtClosed = conn.createStatement();
+		closesList = new ArrayList<Integer>();
+		ResultSet rsetClosed = stmtClosed.executeQuery("select iid from closes");
+		if (rsetClosed != null) {
+			while (rsetClosed.next()) {
+				closesList.add(rsetClosed.getInt("iid"));
+			}
+		} else {
+			out.print(error_msg);
+		}
 		rset = stmt
 				.executeQuery("select I.iid, D.userName, P.name, I.description, I.openDate, I.criticality from Issue I, Project P, Developer D where I.did = D.did and I.pid = P.pid"
 						+ " order by " + value);
@@ -45,23 +56,46 @@
 			out.println("<p>Logged in as " + session.getAttribute("stype")
 					+ " " + session.getAttribute("sname"));
 			out.println("<p>Click <a href=\"logout.jsp\">here</a> to logout.</p>");
+			Object type = session.getAttribute("stype");
+			if(type !=null)
+			{
+				if(type.equals("tester"))
+				{
+					out.println("<p>Click <a href=\"addissueproject.jsp\">here</a> to create a new issue.</p>");
+					out.println("<p>Click <a href=\"verifyfix.jsp\">here</a> to verify a fix.</p>");
+					out.println("<p>Click <a href=\"corrects.jsp\">here</a> to correct an issue.</p>");
+					out.println("<p>Click <a href=\"closes.jsp\">here</a> to close an issue.</p>");
+				}
+				else if(type.equals("developer"))
+				{
+					out.println("<p>Click <a href=\"addissueproject.jsp\">here</a> to create a new project.</p>");
+					out.println("<p>Click <a href=\"applyfix.jsp\">here</a> to apply a fix.</p>");
+				}
+					
+			}
 		}
 		else{
-			out.println("<p>Click <a href=\"login.jsp\">here</a> to login.</p>");
+			out.println("<p>Click <a href=\"login.jsp\">here</a> to login.</p>");			
 		}
+		
 	%>
 	<p>
-		Click <a href="projects.jsp">here</a> to view all Projects.
+		Click <a href="projects.jsp">here</a> to view all projects.
 	</p>
 	<p>
-		Click <a href="users.jsp">here</a> to view all Users.
+		Click <a href="users.jsp">here</a> to view all users.
 	</p>
 	<p>
-		Click <a href="addissueproject.jsp">here</a> to create a new Project
-		or Issue.
+		Click <a href="addusers.jsp">here</a> to add a new user.
 	</p>
 	<p>
-		Click <a href="home.jsp">here</a> to add a new User.
+		Click <a href="deleteusers.jsp">here</a> to delete a user.
+	</p>
+	<p>
+		Click <a href="deleteproject.jsp">here</a> to delete a project.
+	</p>
+	<p>
+		Click <a href="updateissue.jsp">here</a> to update an issue.
 	</p>
 	<H2>Issues</H2>
 	<TABLE>
@@ -97,6 +131,7 @@
 			<td>Description</td>
 			<td>Open Date</td>
 			<td>Criticality</td>
+			<td>Status</td>
 		</tr>
 		<tr>
 			<td><b>----------</b></td>
@@ -104,18 +139,25 @@
 			<td><b>---------------</b></td>
 			<td><b>--------------------------------------------</b></td>
 			<td><b>-----------------</b></td>
+			<td><b>-------------</b></td>
 			<td><b>----------</b></td>
 		</tr>
 		<%
 			if (rset != null) {
 				while (rset.next()) {
 					out.print("<tr>");
-					out.print("<td>" + rset.getInt("iid") + "</td><td>"
+					int iid = rset.getInt("iid");
+					out.print("<td>" + iid + "</td><td>"
 							+ rset.getString("userName") + "</td><td>"
 							+ rset.getString("name") + "</td><td>"
 							+ rset.getString("description") + "</td><td>"
 							+ rset.getString("openDate") + "</td><td>"
 							+ rset.getString("criticality") + "</td>");
+					if(closesList.contains(iid))
+						out.print("<td> Closed </td>");
+					else
+						out.print("<td> Open </td>");
+						
 					out.print("</tr>");
 				}
 			} else {

@@ -40,7 +40,7 @@ public class AddProjectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter pw = new PrintWriter(response.getOutputStream()); 
-
+		
 		try { 
 			if (conn == null) { 
 				// Create a OracleDataSource instance and set URL 

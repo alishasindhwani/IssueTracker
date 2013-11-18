@@ -21,7 +21,7 @@ import oracle.jdbc.pool.OracleDataSource;
  * Servlet implementation class AddJspServlet
  */
 
-public class AddIssueServlet extends HttpServlet {
+public class OpenIssueServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L; 
 	private static final String connect_string = 
 			"jdbc:oracle:thin:as4312/nyquil@//w4111b.cs.columbia.edu:1521/ADB"; 
@@ -30,7 +30,7 @@ public class AddIssueServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddIssueServlet() {
+    public OpenIssueServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -49,8 +49,6 @@ public class AddIssueServlet extends HttpServlet {
 				conn = ods.getConnection(); 
 			} 
 			Statement stmt = conn.createStatement();
-			Statement iidStmt = conn.createStatement();
-			String value = request.getParameter("order");
 			
 			response.setContentType("text/html"); 
 			String developer = request.getParameter("developer");

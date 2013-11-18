@@ -59,4 +59,24 @@
     <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/LoginServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>OpenIssueServlet</display-name>
+    <servlet-name>OpenIssueServlet</servlet-name>
+    <servlet-class>cs4111.OpenIssueServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OpenIssueServlet</servlet-name>
+    <url-pattern>/OpenIssueServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddUserServlet</display-name>
+    <servlet-name>AddUserServlet</servlet-name>
+    <servlet-class>cs4111.AddUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddUserServlet</servlet-name>
+    <url-pattern>/AddUserServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
